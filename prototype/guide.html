@@ -1,0 +1,385 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>工作台 · ThinkFirst</title>
+<link rel="stylesheet" href="styles.css">
+</head>
+<body>
+
+<!-- ============ 顶栏：步骤大纲（只做锚点，不做分页） ============ -->
+<header class="topbar">
+  <a class="logo" href="index.html" style="color:inherit">
+    <span class="logo-mark" aria-hidden="true">
+      <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="#fff" stroke-width="2"
+           stroke-linecap="round" stroke-linejoin="round">
+        <circle cx="12" cy="12" r="3.2"/>
+        <path d="M12 2.6v3.4M12 18v3.4M2.6 12h3.4M18 12h3.4M5.4 5.4l2.4 2.4M16.2 16.2l2.4 2.4M18.6 5.4l-2.4 2.4M7.8 16.2l-2.4 2.4"/>
+      </svg>
+    </span>
+    ThinkFirst
+  </a>
+  <div class="topbar-mid"><div class="rail" id="rail"></div></div>
+  <div class="save-state" id="saveState">
+    <span class="live-dot" style="background:var(--ink-4);box-shadow:none"></span> 自动保存到本地
+  </div>
+</header>
+
+<!-- ============ 工作区 ============ -->
+<main class="workspace">
+
+  <!-- 左：所有阶段纵向堆叠在同一页 -->
+  <section class="pane pane-left" id="paneLeft"></section>
+
+  <!-- 右：实时文档预览 -->
+  <aside class="pane pane-right">
+    <div class="preview-head">
+      <div class="preview-title"><span class="live-dot"></span> 实时文档预览</div>
+      <div class="preview-progress">
+        <span id="progressText">0%</span>
+        <div class="bar"><i id="progressBar" style="width:0%"></i></div>
+      </div>
+    </div>
+    <div class="preview-body"><div class="doc" id="docPreview"></div></div>
+    <div class="preview-foot">
+      <button class="btn btn-primary btn-lg" id="btnFinish">填完了，看结果 →</button>
+    </div>
+  </aside>
+
+</main>
+
+<!-- ============ 弹窗：复制为 AI Prompt ============ -->
+<div class="modal-mask hidden" id="modalMask">
+  <div class="modal">
+    <div class="modal-head">
+      <div>
+        <h3>把这段直接粘给你的编码 AI</h3>
+        <p>它已经带上了硬性约束，AI 不会自作主张给你加登录、加后台。</p>
+      </div>
+      <button class="modal-close" id="modalClose">×</button>
+    </div>
+    <div class="modal-body"><pre id="promptText"></pre></div>
+    <div class="modal-foot">
+      <span class="tip" id="copyTip">粘贴到 Claude Code / Cursor / ChatGPT 都可以</span>
+      <button class="btn btn-primary" id="btnCopyPrompt">复制全文</button>
+    </div>
+  </div>
+</div>
+
+<div class="toast" id="toast"></div>
+
+<script src="shared.js"></script>
+<script>
+/* ==========================================================
+   状态
+   ========================================================== */
+let state = readDraft();
+
+function save() {
+  writeDraft(state);
+  const el = document.getElementById('saveState');
+  el.innerHTML = '<span class="live-dot" style="background:var(--good);box-shadow:0 0 0 3px var(--good-bg)"></span> 已保存 · ' +
+    new Date().toLocaleTimeString('zh-CN', { hour: '2-digit', minute: '2-digit' });
+}
+
+/* ==========================================================
+   顶栏步骤大纲（可点击锚点）
+   ========================================================== */
+function renderRail() {
+  const el = document.getElementById('rail');
+  el.innerHTML = STAGES.map(function (st, i) {
+    let cls = 'rail-item';
+    if (stageDone(state, st)) cls += ' is-done';
+    const badge = stageDone(state, st) ? '✓' : (i + 1);
+    return '<button class="' + cls + '" data-go="' + st.key + '">' +
+             '<span class="rail-badge">' + badge + '</span><span>' + st.name + '</span>' +
+           '</button>';
+  }).join('<span class="rail-sep"></span>');
+
+  el.querySelectorAll('[data-go]').forEach(function (b) {
+    b.addEventListener('click', function () {
+      const target = document.getElementById('stage-' + b.dataset.go);
+      if (target) target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    });
+  });
+}
+
+/* 滚动时高亮当前所在阶段 */
+function watchScroll() {
+  const blocks = document.querySelectorAll('.stageblock');
+  if (!blocks.length || !('IntersectionObserver' in window)) return;
+  const io = new IntersectionObserver(function (entries) {
+    entries.forEach(function (en) {
+      if (!en.isIntersecting) return;
+      const key = en.target.dataset.key;
+      document.querySelectorAll('.rail-item').forEach(function (b) {
+        b.classList.toggle('is-current', b.dataset.go === key);
+      });
+    });
+  }, { rootMargin: '-80px 0px -60% 0px', threshold: 0 });
+  blocks.forEach(function (b) { io.observe(b); });
+}
+
+/* ==========================================================
+   渲染：左栏所有阶段
+   ========================================================== */
+function renderStages() {
+  const el = document.getElementById('paneLeft');
+  const total = STAGES.length;
+
+  el.innerHTML = STAGES.map(function (st, i) {
+    let body = '';
+    if (st.checker) {
+      body = renderChecker();
+    } else {
+      body = st.ids.map(function (id, k) {
+        const q = Q[id];
+        const val = (state.answers[id] || '');
+        const open = !!state.openEx[id];
+        return '' +
+          '<div class="q">' +
+            '<div class="q-head">' +
+              '<span class="q-index">' + String(k + 1).padStart(2, '0') + '</span>' +
+              '<div><div class="q-title">' + q.title + '</div>' +
+              '<div class="q-hint">' + q.hint + '</div></div>' +
+            '</div>' +
+            '<textarea class="q-input' + (q.h1 ? ' is-oneline' : '') + '" data-id="' + id + '" ' +
+              'rows="' + (q.h1 ? 1 : 4) + '" placeholder="' +
+              esc(q.ph).replace(/"/g, '&quot;') + '">' + esc(val) + '</textarea>' +
+            '<button class="ex-toggle' + (open ? ' is-open' : '') + '" data-ex="' + id + '">' +
+              '<span class="caret">▶</span> ' + (open ? '收起错例和正例' : '看看填错的样子和填对的样子') +
+            '</button>' +
+            (open ?
+              '<div class="examples">' +
+                '<div class="ex ex-bad"><div class="ex-label">✕ 填错的典型样子</div>' + q.bad + '</div>' +
+                '<div class="ex ex-good"><div class="ex-label">✓ 一个填对了的例子</div>' + q.good + '</div>' +
+              '</div>' : '') +
+          '</div>';
+      }).join('');
+    }
+
+    return '' +
+      '<div class="stageblock" id="stage-' + st.key + '" data-key="' + st.key + '">' +
+        '<div class="stageblock-head">' +
+          '<span class="stageblock-no">' + String(i + 1).padStart(2, '0') + ' / ' + String(total).padStart(2, '0') + '</span>' +
+          '<span class="stageblock-name">' + st.name + '</span>' +
+        '</div>' +
+        '<h2 class="stage-title">' + st.title + '</h2>' +
+        '<div class="stage-desc">' + st.desc + '</div>' +
+        body +
+      '</div>';
+  }).join('');
+
+  bindStages();
+  bindChecker();
+}
+
+/* ---------- 灵魂三问 ---------- */
+function renderChecker() {
+  const c = state.checker;
+  const v = verdict(c);
+  return '' +
+    '<div class="checker">' +
+      '<div style="font-size:14.5px;font-weight:600;margin-bottom:4px">要做的功能</div>' +
+      '<div style="font-size:13.5px;color:var(--ink-3);margin-bottom:12px">一行写一个功能，然后用三个问题过一遍筛子</div>' +
+      '<div class="checker-row">' +
+        '<input class="checker-input" id="checkerName" placeholder="例：分阶段引导填写（JTBD → Pre-mortem）" value="' +
+          esc(c.name).replace(/"/g, '&quot;') + '">' +
+      '</div>' +
+      '<div style="margin-top:18px">' +
+        soulQ('q1', 'Q1', '没有它，产品还能用吗？') +
+        soulQ('q2', 'Q2', '它能验证你的核心假设吗？') +
+        soulQ('q3', 'Q3', '第一次就需要它吗？') +
+      '</div>' +
+      '<div class="verdict ' + v.cls + '" id="verdictBox">' +
+        '<span class="verdict-badge">' + v.level + '</span><div>' + v.text + '</div>' +
+      '</div>' +
+      '<div class="checker-row" style="margin-top:14px">' +
+        '<button class="btn btn-primary" id="btnAddCheck"' +
+          (c.name.trim() && c.q1 !== null && c.q2 !== null && c.q3 !== null ? '' : ' disabled') +
+          '>记录到文档</button>' +
+        '<button class="btn btn-quiet" id="btnResetCheck">清空</button>' +
+      '</div>' +
+      ((state.checks || []).length ?
+        '<div style="margin-top:22px;padding-top:18px;border-top:1px solid var(--line)">' +
+          '<div style="font-size:13.5px;font-weight:600;margin-bottom:10px">已记录的功能（' + state.checks.length + '）</div>' +
+          '<div class="verdict-list">' +
+            state.checks.map(function (x, i) {
+              return '<div class="verdict-item">' +
+                '<span class="pri pri-' + x.level.toLowerCase() + '">' + x.level + '</span>' +
+                '<span>' + esc(x.name) + '</span>' +
+                '<button class="rm" data-rm="' + i + '" title="删除">×</button>' +
+              '</div>';
+            }).join('') +
+          '</div>' +
+        '</div>' : '') +
+    '</div>';
+}
+
+function soulQ(key, tag, text) {
+  const val = state.checker[key];
+  return '<div class="soul-q">' +
+    '<div class="soul-q-text"><b>' + tag + '</b> · ' + text + '</div>' +
+    '<div class="seg">' +
+      '<button data-q="' + key + '" data-v="1" class="' + (val === 1 ? 'is-on' : '') + '">' + (key === 'q3' ? '是' : '能') + '</button>' +
+      '<button data-q="' + key + '" data-v="0" class="' + (val === 0 ? 'is-on' : '') + '">' + (key === 'q3' ? '否' : '不能') + '</button>' +
+    '</div>' +
+  '</div>';
+}
+
+function verdict(c) {
+  const s = (c.q1 === 1 ? 1 : 0) + (c.q2 === 1 ? 1 : 0) + (c.q3 === 1 ? 1 : 0);
+  if (s === 3) return { level: 'P0', cls: 'v-p0', text: '三问全部命中。<b>第一版就做它</b>——没有它，你的核心假设根本验证不了。' };
+  if (s > 0) return { level: 'P1', cls: 'v-p1', text: '命中 ' + s + ' 项。<b>先记下来，第一版跑通之后再加</b>——它有价值，但不占 P0 的名额。' };
+  return { level: 'P2', cls: 'v-p2', text: '一项都没命中。<b>放进「不做清单」</b>——它可能是好功能，但现在的你不需要它。' };
+}
+
+/* ==========================================================
+   绑定
+   ========================================================== */
+function bindStages() {
+  const el = document.getElementById('paneLeft');
+
+  el.querySelectorAll('.q-input').forEach(function (t) {
+    t.addEventListener('input', function () {
+      state.answers[t.dataset.id] = t.value;
+      renderPreview(); renderRail(); save();
+    });
+  });
+
+  el.querySelectorAll('[data-ex]').forEach(function (b) {
+    b.addEventListener('click', function () {
+      const id = b.dataset.ex;
+      const open = !state.openEx[id];
+      state.openEx[id] = open;
+      /* 只重绘这一张卡片的示例区，不整页重绘，避免丢失滚动位置和输入焦点 */
+      const card = b.closest('.q');
+      const box = card.querySelector('.examples') || document.createElement('div');
+      box.className = 'examples';
+      box.innerHTML = open
+        ? '<div class="ex ex-bad"><div class="ex-label">✕ 填错的典型样子</div>' + Q[id].bad + '</div>' +
+          '<div class="ex ex-good"><div class="ex-label">✓ 一个填对了的例子</div>' + Q[id].good + '</div>'
+        : '';
+      if (!card.querySelector('.examples')) card.appendChild(box);
+      else if (!open) box.remove();
+      b.classList.toggle('is-open', open);
+      b.innerHTML = '<span class="caret">▶</span> ' + (open ? '收起错例和正例' : '看看填错的样子和填对的样子');
+      save();
+    });
+  });
+}
+
+function bindChecker() {
+  const el = document.getElementById('paneLeft');
+  const nameInput = document.getElementById('checkerName');
+  if (!nameInput) return;
+
+  nameInput.addEventListener('input', function () {
+    state.checker.name = nameInput.value;
+    refreshChecker();
+  });
+  el.querySelectorAll('[data-q]').forEach(function (b) {
+    b.addEventListener('click', function () {
+      state.checker[b.dataset.q] = Number(b.dataset.v);
+      refreshChecker();
+    });
+  });
+
+  function refreshChecker() {
+    const c = state.checker;
+    el.querySelectorAll('[data-q]').forEach(function (b) {
+      b.classList.toggle('is-on', c[b.dataset.q] === Number(b.dataset.v));
+    });
+    const v = verdict(c);
+    const box = document.getElementById('verdictBox');
+    box.className = 'verdict ' + v.cls;
+    box.innerHTML = '<span class="verdict-badge">' + v.level + '</span><div>' + v.text + '</div>';
+    document.getElementById('btnAddCheck').disabled = !(c.name.trim() && c.q1 !== null && c.q2 !== null && c.q3 !== null);
+    save();
+  }
+
+  document.getElementById('btnAddCheck').addEventListener('click', function () {
+    const c = state.checker;
+    const v = verdict(c);
+    state.checks.push({
+      name: c.name.trim(), level: v.level,
+      q1: c.q1 === 1 ? '不能' : '能',
+      q2: c.q2 === 1 ? '✔' : '✘',
+      q3: c.q3 === 1 ? '是' : '否'
+    });
+    state.checker = { name: '', q1: null, q2: null, q3: null };
+    renderStages(); renderPreview(); renderRail(); save();
+    toast('已记录：' + state.checks[state.checks.length - 1].name + ' → ' + v.level);
+  });
+
+  document.getElementById('btnResetCheck').addEventListener('click', function () {
+    state.checker = { name: '', q1: null, q2: null, q3: null };
+    renderStages(); save();
+  });
+
+  el.querySelectorAll('[data-rm]').forEach(function (b) {
+    b.addEventListener('click', function () {
+      state.checks.splice(Number(b.dataset.rm), 1);
+      renderStages(); renderPreview(); renderRail(); save();
+    });
+  });
+}
+
+/* ==========================================================
+   右侧预览
+   ========================================================== */
+function renderPreview() {
+  document.getElementById('docPreview').innerHTML = mdToHtml(docMarkdown(state));
+  const done = REQUIRED_IDS.filter(function (id) { return built(state, id); }).length;
+  const extra = (state.checks || []).length ? 1 : 0;
+  const pct = Math.round((done + extra) / (REQUIRED_IDS.length + 1) * 100);
+  document.getElementById('progressText').textContent = pct + '%';
+  document.getElementById('progressBar').style.width = pct + '%';
+}
+
+/* ==========================================================
+   完成 → 完成页
+   ========================================================== */
+document.getElementById('btnFinish').addEventListener('click', function () {
+  const missing = REQUIRED_IDS.filter(function (id) { return !built(state, id); });
+  if (missing.length) {
+    toast('还有 ' + missing.length + ' 个问题空着，会在文档里标成「待补」。');
+  }
+  setTimeout(function () { location.href = 'done.html'; }, missing.length ? 700 : 0);
+});
+
+/* ==========================================================
+   复制为 AI Prompt
+   ========================================================== */
+function openModal() {
+  document.getElementById('promptText').textContent = buildAiPrompt(state);
+  document.getElementById('modalMask').classList.remove('hidden');
+}
+function closeModal() {
+  document.getElementById('modalMask').classList.add('hidden');
+  document.getElementById('copyTip').textContent = '粘贴到 Claude Code / Cursor / ChatGPT 都可以';
+}
+document.getElementById('modalClose').addEventListener('click', closeModal);
+document.getElementById('modalMask').addEventListener('click', function (e) {
+  if (e.target.id === 'modalMask') closeModal();
+});
+document.addEventListener('keydown', function (e) { if (e.key === 'Escape') closeModal(); });
+document.getElementById('btnCopyPrompt').addEventListener('click', function () {
+  copyText(buildAiPrompt(state)).then(function (ok) {
+    document.getElementById('copyTip').textContent = ok
+      ? '✓ 已复制。现在把它粘给你的编码 AI。'
+      : '复制失败，请手动全选上面的文本复制';
+  });
+});
+
+/* ==========================================================
+   启动
+   ========================================================== */
+renderStages();
+renderRail();
+renderPreview();
+watchScroll();
+</script>
+</body>
+</html>

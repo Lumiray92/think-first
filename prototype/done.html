@@ -1,0 +1,210 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>完成 · ThinkFirst</title>
+<link rel="stylesheet" href="styles.css">
+</head>
+<body>
+
+<header class="topbar">
+  <a class="logo" href="index.html" style="color:inherit">
+    <span class="logo-mark" aria-hidden="true">
+      <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="#fff" stroke-width="2"
+           stroke-linecap="round" stroke-linejoin="round">
+        <circle cx="12" cy="12" r="3.2"/>
+        <path d="M12 2.6v3.4M12 18v3.4M2.6 12h3.4M18 12h3.4M5.4 5.4l2.4 2.4M16.2 16.2l2.4 2.4M18.6 5.4l-2.4 2.4M7.8 16.2l-2.4 2.4"/>
+      </svg>
+    </span>
+    ThinkFirst
+  </a>
+  <div class="topbar-mid"><div class="rail" id="rail"></div></div>
+  <div class="save-state">
+    <span class="live-dot" style="background:var(--good);box-shadow:0 0 0 3px var(--good-bg)"></span> 已保存到本地
+  </div>
+</header>
+
+<main class="done-wrap">
+
+  <!-- ============ 庆祝 ============ -->
+  <section class="celebrate" id="celebrate">
+    <div class="celebrate-badge">✓</div>
+    <h1 id="doneTitle">终于完成了</h1>
+    <p class="lead" id="doneLead"></p>
+  </section>
+
+  <!-- ============ 待补提示 ============ -->
+  <section class="todo hidden" id="todoBox">
+    <span class="todo-icon">⚠</span>
+    <div>
+      <b id="todoTitle"></b>
+      <span id="todoBody"></span>
+      <div style="margin-top:12px">
+        <a class="btn btn-ghost" href="guide.html">← 回去补上</a>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ 两个大动作 ============ -->
+  <section class="actions">
+    <button class="action primary" id="btnPrompt">
+      <span>复制为 AI Prompt</span>
+      <span class="sub">直接粘给你的编码 AI</span>
+    </button>
+    <button class="action" id="btnExport">
+      <span>导出 Markdown</span>
+      <span class="sub">存成 .md 文件留着</span>
+    </button>
+  </section>
+
+  <!-- ============ 体验收集 ============ -->
+  <section class="feedback" id="feedback">
+    <div class="fb-kicker">帮个忙 · 10 秒</div>
+    <div class="fb-q">你会把这份需求文档分享或使用吗？</div>
+    <div class="fb-opts" id="fbOpts">
+      <button class="fb-btn" data-v="yes">会</button>
+      <button class="fb-btn" data-v="no">不会</button>
+    </div>
+    <div id="fbResult"></div>
+  </section>
+
+  <p class="done-foot">数据只存在你的浏览器里 · <a href="index.html">回到首页</a></p>
+
+</main>
+
+<!-- ============ 弹窗 ============ -->
+<div class="modal-mask hidden" id="modalMask">
+  <div class="modal">
+    <div class="modal-head">
+      <div>
+        <h3>把这段直接粘给你的编码 AI</h3>
+        <p>它已经带上了硬性约束，AI 不会自作主张给你加登录、加后台。</p>
+      </div>
+      <button class="modal-close" id="modalClose">×</button>
+    </div>
+    <div class="modal-body"><pre id="promptText"></pre></div>
+    <div class="modal-foot">
+      <span class="tip" id="copyTip">粘贴到 Claude Code / Cursor / ChatGPT 都可以</span>
+      <button class="btn btn-primary" id="btnCopyPrompt">复制全文</button>
+    </div>
+  </div>
+</div>
+
+<div class="toast" id="toast"></div>
+
+<script src="shared.js"></script>
+<script>
+const state = readDraft();
+const missing = REQUIRED_IDS.filter(function (id) { return !built(state, id); });
+const filled = REQUIRED_IDS.length - missing.length;
+const total = REQUIRED_IDS.length;
+
+/* ---------- 顶栏大纲（全部标记完成/未完成） ---------- */
+document.getElementById('rail').innerHTML = STAGES.map(function (st, i) {
+  const ok = stageDone(state, st);
+  return '<span class="rail-item ' + (ok ? 'is-done' : '') + '">' +
+           '<span class="rail-badge">' + (ok ? '✓' : (i + 1)) + '</span><span>' + st.name + '</span>' +
+         '</span>';
+}).join('<span class="rail-sep"></span>');
+
+/* ---------- 庆祝文案 ---------- */
+(function () {
+  const title = document.getElementById('doneTitle');
+  const lead = document.getElementById('doneLead');
+
+  if (filled === 0) {
+    title.textContent = '文档还是空的';
+    lead.innerHTML = '你还没有填任何内容。回到工作台，从第 1 个问题开始 —— <b>先写下你要做个什么</b>，剩下的会自己长出来。';
+    document.getElementById('celebrate').querySelector('.celebrate-badge').textContent = '—';
+    document.getElementById('celebrate').querySelector('.celebrate-badge').style.background = 'var(--line-2)';
+    document.getElementById('celebrate').querySelector('.celebrate-badge').style.color = 'var(--ink-3)';
+    document.getElementById('celebrate').querySelector('.celebrate-badge').style.boxShadow = 'none';
+    return;
+  }
+
+  lead.innerHTML =
+    '<b>' + filled + ' 个问题，你一个都没绕过去。</b><br>' +
+    '大多数人在第 3 个问题就关掉页面了 —— 你填完了，还顺手给功能排了个优先级。<br>' +
+    '现在你手里这份文档，比三周后的返工便宜得多。';
+})();
+
+/* ---------- 待补提示 ---------- */
+if (missing.length) {
+  document.getElementById('todoBox').classList.remove('hidden');
+  document.getElementById('todoTitle').textContent = '还有 ' + missing.length + ' 个问题空着';
+  document.getElementById('todoBody').innerHTML =
+    missing.map(function (id) { return '<span class="empty-chip">' + Q[id].doc + '</span>'; }).join('') +
+    '这些内容在文档里会显示成「<span class="empty-chip">待补</span>」—— 不影响导出，但补上之后这份文档才真的能用。';
+}
+
+/* ---------- 两个动作 ---------- */
+function openModal() {
+  document.getElementById('promptText').textContent = buildAiPrompt(state);
+  document.getElementById('modalMask').classList.remove('hidden');
+}
+document.getElementById('btnPrompt').addEventListener('click', openModal);
+document.getElementById('modalClose').addEventListener('click', function () {
+  document.getElementById('modalMask').classList.add('hidden');
+  document.getElementById('copyTip').textContent = '粘贴到 Claude Code / Cursor / ChatGPT 都可以';
+});
+document.getElementById('modalMask').addEventListener('click', function (e) {
+  if (e.target.id === 'modalMask') document.getElementById('modalMask').classList.add('hidden');
+});
+document.addEventListener('keydown', function (e) {
+  if (e.key === 'Escape') document.getElementById('modalMask').classList.add('hidden');
+});
+document.getElementById('btnCopyPrompt').addEventListener('click', function () {
+  copyText(buildAiPrompt(state)).then(function (ok) {
+    document.getElementById('copyTip').textContent = ok
+      ? '✓ 已复制。现在把它粘给你的编码 AI。'
+      : '复制失败，请手动全选上面的文本复制';
+  });
+});
+document.getElementById('btnExport').addEventListener('click', function () {
+  const name = downloadMarkdown(state);
+  toast('已导出 ' + name + '.md');
+});
+
+/* ---------- 体验收集 ---------- */
+const FB_KEY = 'thinkfirst.feedback.v1';
+function saveFeedback(obj) {
+  try { localStorage.setItem(FB_KEY, JSON.stringify(Object.assign({ at: new Date().toISOString() }, obj))); } catch (e) {}
+}
+
+document.getElementById('fbOpts').addEventListener('click', function (e) {
+  const btn = e.target.closest('.fb-btn');
+  if (!btn) return;
+  const v = btn.dataset.v;
+  document.querySelectorAll('.fb-btn').forEach(function (b) { b.classList.toggle('is-on', b === btn); });
+
+  const box = document.getElementById('fbResult');
+
+  if (v === 'yes') {
+    saveFeedback({ answer: 'yes' });
+    /* 选「会」不再追问，直接结束 */
+    document.getElementById('fbOpts').style.display = 'none';
+    box.innerHTML = '<div class="fb-thanks">谢谢你 —— 这句话对我们来说比你想的重要。</div>';
+    document.querySelector('.fb-q').textContent = '祝你这版一次做对。';
+    return;
+  }
+
+  box.innerHTML =
+    '<div class="fb-reason">' +
+      '<p>能说一下为什么吗？一句就够 —— 我们不会追问，也不会让你注册。</p>' +
+      '<textarea id="fbText" placeholder="例：我不知道该怎么把它交给 AI / 填完还是没想清楚 / 我其实就是想要个模板"></textarea>' +
+      '<div class="row"><button class="btn btn-primary" id="fbSubmit">提交</button></div>' +
+    '</div>';
+
+  document.getElementById('fbText').focus();
+  document.getElementById('fbSubmit').addEventListener('click', function () {
+    const text = (document.getElementById('fbText').value || '').trim();
+    saveFeedback({ answer: 'no', reason: text });
+    document.getElementById('fbOpts').style.display = 'none';
+    box.innerHTML = '<div class="fb-thanks">收到，谢谢你说了实话 —— 这比「挺好的」有用得多。</div>';
+    document.querySelector('.fb-q').textContent = '我们会认真看每一条。';
+  });
+});
+</script>
+</body>
+</html>

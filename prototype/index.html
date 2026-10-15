@@ -1,0 +1,272 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>ThinkFirst · 先想清楚，再动手</title>
+<link rel="stylesheet" href="styles.css">
+</head>
+<body class="landing">
+
+<!-- ============ 背景光晕 ============ -->
+<div class="aura" aria-hidden="true">
+  <span class="blob b1"></span>
+  <span class="blob b2"></span>
+  <span class="blob b3"></span>
+  <div class="grid"></div>
+</div>
+
+<!-- ============ 顶部导航 ============ -->
+<nav class="topnav">
+  <a class="logo" href="index.html" style="color:inherit">
+    <span class="logo-mark" aria-hidden="true">
+      <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="#fff" stroke-width="2"
+           stroke-linecap="round" stroke-linejoin="round">
+        <circle cx="12" cy="12" r="3.2"/>
+        <path d="M12 2.6v3.4M12 18v3.4M2.6 12h3.4M18 12h3.4M5.4 5.4l2.4 2.4M16.2 16.2l2.4 2.4M18.6 5.4l-2.4 2.4M7.8 16.2l-2.4 2.4"/>
+      </svg>
+    </span>
+    ThinkFirst
+  </a>
+  <div class="topnav-right">
+    <a class="topnav-link" href="#case">为什么要先想清楚</a>
+    <span class="lang-chip"><span class="on">中文</span><span>EN</span></span>
+  </div>
+</nav>
+
+<!-- ============ 首屏 ============ -->
+<main class="stage">
+
+  <a class="announce rise" href="#case">
+    <span class="spark">◆</span>
+    <span><b>小周花了 21 天</b>才发现方向错了。你花 10 分钟就能避免 →</span>
+  </a>
+
+  <h1 class="headline rise">先想清楚，再动手</h1>
+  <p class="hero-sub rise">把你的点子，变成一份能直接交给 AI 的需求文档</p>
+
+  <button class="start rise" id="btnStart">
+    开始生成
+    <span class="arrow">→</span>
+  </button>
+  <div class="hero-meta rise">
+    <span>4 个阶段</span><span class="dot"></span>
+    <span>12 个问题</span><span class="dot"></span>
+    <span>边填边生成文档</span>
+  </div>
+
+  <div class="quick rise">
+    <a class="pill" href="#case">
+      <svg class="ico-svg" viewBox="0 0 24 24"><path d="M12 9v4M12 17h.01M10.3 3.9 2.4 17.6A2 2 0 0 0 4.1 20.6h15.8a2 2 0 0 0 1.7-3L13.7 3.9a2 2 0 0 0-3.4 0Z"/></svg>
+      一个真实的失败案例
+    </a>
+    <a class="pill" href="#output">
+      <svg class="ico-svg" viewBox="0 0 24 24"><path d="M14 3H7a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V8Z"/><path d="M14 3v5h5M9 13h6M9 17h4"/></svg>
+      产出物长什么样
+    </a>
+    <a class="pill" href="#scope">
+      <svg class="ico-svg" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M5.6 5.6l12.8 12.8"/></svg>
+      它不做什么
+    </a>
+  </div>
+
+</main>
+
+<!-- ============ 滚动区 ============ -->
+<div class="scroll-zone">
+
+  <!-- 失败案例 -->
+  <section class="section" id="case">
+    <div class="wrap">
+      <div class="section-head">
+        <h2>先看一个真实发生过的失败</h2>
+        <p>方向错误平均要花 3 周才被发现。这个页面想把它压缩到 10 分钟。</p>
+      </div>
+
+      <div class="case">
+        <div class="case-head">
+          <span class="pill-tag">案例</span>
+          小周 · 24 岁 · 第一次独立用 AI 做完整项目
+        </div>
+        <div class="case-body">
+          <div class="case-row">
+            <div class="case-day">第 1 天</div>
+            <div class="case-text">
+              他冒出一个点子——「做一个 AI 日程助手，帮人管理时间」。当天就对 AI 说：
+              <b>「帮我写一份这个项目的需求文档」</b>。AI 给了他一份看起来很专业的东西，他扫了一眼，开工。
+            </div>
+          </div>
+          <div class="case-row">
+            <div class="case-day">第 9 天</div>
+            <div class="case-text">
+              功能做了一半，隐约觉得哪里不对，但说不上来。他的处理方式是——<b>再加几个功能</b>。
+            </div>
+          </div>
+          <div class="case-row">
+            <div class="case-day">第 18 天</div>
+            <div class="case-text">
+              找朋友试用。朋友看了两分钟说：<b>「我不需要管理时间，我只是老忘记女朋友生日。」</b>
+            </div>
+          </div>
+          <div class="case-row">
+            <div class="case-day">第 21 天</div>
+            <div class="case-text">
+              他回头翻那份文档，里面写着：<b>「目标用户：所有需要提升效率的人。」</b>一句话，等于什么都没说。
+            </div>
+          </div>
+        </div>
+        <div class="case-foot">
+          他不是做错了功能，他是从第 0 天就做错了方向。<span>而那份文档，从头到尾没人问过他一个问题。</span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 它怎么帮你 -->
+  <section class="section section-alt">
+    <div class="wrap">
+      <div class="section-head">
+        <h2>它怎么帮你避免这件事</h2>
+        <p>全靠三件事，没有第四件。</p>
+      </div>
+      <div class="steps3">
+        <div class="step3">
+          <div class="step3-num">1</div>
+          <h3>跟着走就行</h3>
+          <p>12 个问题分 4 个阶段。每一步只问你现在该想的，明确告诉你<b>什么可以先不管</b>。</p>
+        </div>
+        <div class="step3">
+          <div class="step3-num">2</div>
+          <h3>告诉你为什么问</h3>
+          <p>每个字段都配了「为什么问」+「填错的典型样子」+「一个填对了的例子」。不是填空，是理解。</p>
+        </div>
+        <div class="step3">
+          <div class="step3-num">3</div>
+          <h3>边填边长出文档</h3>
+          <p>右侧实时生成。填完一键<b>复制成给 AI 的 prompt</b>，或导出 Markdown。有去处，不白填。</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 产出物 -->
+  <section class="section" id="output">
+    <div class="wrap">
+      <div class="section-head">
+        <h2>填完之后，你手里有什么</h2>
+        <p>一份能直接粘给 Claude Code / Cursor / 同事的文档，而不是一堆散落的想法。</p>
+      </div>
+
+      <div class="output">
+        <div class="output-doc">
+          <div class="h"># ThinkFirst</div>
+          <div class="c">&gt; 一页纸需求分析</div>
+          <br>
+          <div class="k">## 一、JTBD 分析</div>
+          <div>当 <span style="color:#FDE68A">刚有一个点子</span> 时，</div>
+          <div>他们想要 <span style="color:#FDE68A">把模糊想法变成清晰文档</span>，</div>
+          <div>以便于 <span style="color:#FDE68A">不在错方向上浪费时间</span>。</div>
+          <br>
+          <div class="k">## 二、Pre-mortem</div>
+          <div>- 用户填到第 2 页就跳出</div>
+          <div>- 产出物从不被导出</div>
+          <br>
+          <div class="k">## 三、功能自检</div>
+          <div>| 功能 | 结论 |</div>
+          <div>| 分阶段引导 | <span style="color:#6CE9A6">P0</span> |</div>
+          <div>| 账号体系 | <span style="color:#94A3B8">P2</span> |</div>
+        </div>
+
+        <div class="output-list">
+          <div class="output-item">
+            <div class="tick">✓</div>
+            <div><b>一句话定位</b>：给谁、解决什么问题——后面每次「这个功能要不要做」都拿它当尺子。</div>
+          </div>
+          <div class="output-item">
+            <div class="tick">✓</div>
+            <div><b>JTBD 分析</b>：用户在什么处境下、想达到什么结果、现在是怎么凑合解决的。</div>
+          </div>
+          <div class="output-item">
+            <div class="tick">✓</div>
+            <div><b>Pre-mortem 风险清单</b>：最致命的那条原因是什么，第 1 周具体做什么防它。</div>
+          </div>
+          <div class="output-item">
+            <div class="tick">✓</div>
+            <div><b>功能优先级表</b>：用灵魂三问把功能分成 P0 / P1 / P2，第一版只做 P0。</div>
+          </div>
+          <div class="output-item">
+            <div class="tick">✓</div>
+            <div><b>一段可直接粘贴的 AI Prompt</b>：把整份文档包装成带硬性约束的指令。</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 不做什么 -->
+  <section class="section section-alt" id="scope">
+    <div class="wrap">
+      <div class="section-head">
+        <h2>它不做什么</h2>
+        <p>说清楚边界，比说清楚功能更重要。</p>
+      </div>
+      <div class="nots">
+        <div class="not">
+          <div class="not-x">✕</div>
+          <div><b>不给你答案</b><span>它不会替你写出「正确」的需求，只逼你把没想过的地方想一遍。</span></div>
+        </div>
+        <div class="not">
+          <div class="not-x">✕</div>
+          <div><b>不做账号、不做协作</b><span>不用登录、不上传，数据只在你自己的浏览器里。</span></div>
+        </div>
+        <div class="not">
+          <div class="not-x">✕</div>
+          <div><b>不堆七个思维模型</b><span>第一版只做 JTBD + Pre-mortem。宁深不广。</span></div>
+        </div>
+        <div class="not">
+          <div class="not-x">✕</div>
+          <div><b>不服务「只想快点要答案」的人</b><span>如果你要的是 AI 直接生成文档，这个工具会让你觉得麻烦——那是对的。</span></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 收尾 -->
+  <section class="section">
+    <div class="wrap-narrow">
+      <div class="cta-final">
+        <h2>在写第一行代码之前，先花 10 分钟</h2>
+        <p>4 个阶段，12 个问题。中途退出也没关系，草稿会自动存在本地。</p>
+        <div style="margin-top:28px">
+          <button class="btn btn-primary btn-lg" id="btnStart2">开始生成 →</button>
+        </div>
+        <p style="margin-top:16px;font-size:13px;color:var(--ink-3)">
+          不用注册 · 不上传 · 产出可直接粘贴给 AI
+        </p>
+      </div>
+    </div>
+  </section>
+
+  <footer class="footer">
+    ThinkFirst MVP 原型 · 用于验证「分阶段引导 + 实时文档」是否真的帮人想清楚
+  </footer>
+
+</div>
+
+<script>
+/* 开始生成 → 进入工作台 */
+document.getElementById('btnStart').addEventListener('click', function () { location.href = 'guide.html'; });
+document.getElementById('btnStart2').addEventListener('click', function () { location.href = 'guide.html'; });
+
+/* 平滑滚动 */
+document.querySelectorAll('a[href^="#"]').forEach(function (a) {
+  a.addEventListener('click', function (e) {
+    const t = document.querySelector(a.getAttribute('href'));
+    if (!t) return;
+    e.preventDefault();
+    t.scrollIntoView({ behavior: 'smooth', block: 'start' });
+  });
+});
+</script>
+</body>
+</html>
