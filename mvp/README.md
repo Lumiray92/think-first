@@ -19,7 +19,7 @@
 1. 下载本仓库
    - 点仓库页面右上角 `Code` → `Download ZIP`，或
    - 执行 `git clone https://github.com/Lumiray92/think-first.git`
-2. 进入 `prototype/` 目录
+2. 进入 `mvp/` 目录
 3. **双击 `index.html`**，用 Chrome / Edge / Firefox 打开即可
 
 > 不需要 `npm install`，没有任何第三方依赖，不需要构建步骤。
@@ -28,7 +28,7 @@
 
 `file://` 协议下部分浏览器会限制剪贴板 API。原型已做降级处理（「复制为 AI Prompt」在双击打开时也能用，走的是 `document.execCommand` 兜底），但如果你要最稳的复制体验，起个本地服务。
 
-在 `prototype/` 目录下任选一条执行：
+在 `mvp/` 目录下任选一条执行：
 
 ```bash
 # 装了 Python
@@ -72,7 +72,7 @@ npx serve .
 - ❌ 团队协作 / 评论批注
 - ❌ PDF 导出 / 精美排版
 
-完整的取舍理由、功能筛选表和不做清单，见仓库根目录的 [README.md](../README.md)。
+完整的取舍理由、功能筛选表和不做清单，见 [需求前分析](../docs/需求前分析.md)。
 
 ---
 
