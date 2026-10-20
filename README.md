@@ -27,7 +27,7 @@ ThinkFirst 不替你写答案，只在你写第一行代码之前，逼你把「
 think-first/
 ├── README.md                   # 项目简介与架构
 ├── docs/
-│   └── 需求前分析.md            # JTBD、Pre-mortem 与 MVP 方案
+│   └── 需求前分析.md            # 问题发现、JTBD、Pre-mortem、场景分析与 MVP 方案
 ├── mvp/
 │   ├── README.md               # MVP 体验指南
 │   └── index.html              # 单文件原型：首页 + 工作台 + 完成页
@@ -57,7 +57,7 @@ python -m http.server 8000
 
 ## 文档
 
-- [需求前分析：JTBD / Pre-mortem / MVP 方案](docs/需求前分析.md)
+- [需求前分析：问题发现 / 灵魂三问 / 用户故事 / JTBD / Pre-mortem / 场景分析 / MVP 方案](docs/需求前分析.md)
 - [MVP 体验指南](mvp/README.md)
 
 ## 项目状态
