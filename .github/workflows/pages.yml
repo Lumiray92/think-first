@@ -1,13 +1,13 @@
-name: Deploy MVP prototype to GitHub Pages
+name: Deploy ThinkFirst to GitHub Pages
 
-# 把 mvp/ 目录作为一个纯静态站点发布到 GitHub Pages。
-# 只要 mvp/ 有改动就会自动重新部署。
+# app/ 是 Vite + Vue 3 应用：先 npm ci / npm run build，再把 app/dist 发布到 GitHub Pages。
+# 只要 app/ 或本工作流有改动就会自动重新部署。
 
 on:
   push:
     branches: [main]
     paths:
-      - 'mvp/**'
+      - 'app/**'
       - '.github/workflows/pages.yml'
   workflow_dispatch:
 
@@ -21,23 +21,43 @@ concurrency:
   cancel-in-progress: false
 
 jobs:
+  build:
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: app
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+          cache-dependency-path: app/package-lock.json
+
+      - name: Configure Pages
+        uses: actions/configure-pages@v5
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Build
+        run: npm run build
+
+      - name: Upload artifact
+        uses: actions/upload-pages-artifact@v3
+        with:
+          path: app/dist
+
   deploy:
+    needs: build
     environment:
       name: github-pages
       url: ${{ steps.deployment.outputs.page_url }}
     runs-on: ubuntu-latest
     steps:
-      - name: Checkout
-        uses: actions/checkout@v4
-
-      - name: Configure Pages
-        uses: actions/configure-pages@v5
-
-      - name: Upload artifact
-        uses: actions/upload-pages-artifact@v3
-        with:
-          path: ./mvp
-
       - name: Deploy to GitHub Pages
         id: deployment
         uses: actions/deploy-pages@v4
