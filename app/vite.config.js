@@ -3,8 +3,8 @@ import { defineConfig } from 'vite'
 import vue from '@vitejs/plugin-vue'
 
 export default defineConfig({
-  // GitHub Pages 项目站点地址：https://lumiray92.github.io/think-first/
-  base: '/think-first/',
+  // 相对路径，GitHub Pages 子路径与 Cloudflare Pages 根路径都能用
+  base: './',
   plugins: [vue()],
   resolve: {
     alias: {
