@@ -4,7 +4,9 @@
 
 ThinkFirst 是一个**纯前端网页工具**：帮你把一个模糊的点子，推敲成一份可以直接交给 AI 或团队的需求分析文档。不用注册、不上传数据，边填边实时生成文档。
 
-**在线体验：<https://lumiray92.github.io/think-first/>**
+**在线体验：<https://think-first.pages.dev/>**
+
+> 备用地址：<https://lumiray92.github.io/think-first/>。部分网络会重置 `*.github.io` 的连接，优先使用上面的 Cloudflare Pages 地址。
 
 ## 它解决什么问题
 
@@ -45,11 +47,11 @@ think-first/
 ├── app/                          # 新版应用（Vue 3 + Vite）
 │   ├── index.html
 │   ├── package.json
-│   ├── vite.config.js            # base: /think-first/
+│   ├── vite.config.js            # base: ./（相对路径，兼容多种静态托管）
 │   ├── public/
 │   └── src/
 │       ├── main.js / App.vue
-│       ├── router/index.js       # hash 路由，适配 GitHub Pages
+│       ├── router/index.js       # hash 路由，适配静态托管
 │       ├── views/                # 首页 / 逐步引导 / 快速对话 / 完成页
 │       ├── components/           # 案例库、烦恼日记、文档气泡、评分与功能清单等
 │       ├── lib/                  # 问题数据、案例数据、对话脚本、文档生成、存储
@@ -65,8 +67,8 @@ think-first/
 - **数据驱动**：所有问题、阶段、案例、对话脚本分别集中在 `src/lib/questions.js`、`guideCases.js`、`chat.js`；新增阶段只加数据，不改页面骨架
 - **状态管理**：一份全局会话状态（`composables/useSession.js`）写入 localStorage，路由切换不丢
 - **文档生成**：前端把答案实时渲染成 Markdown，并生成带硬性约束的 AI Prompt
-- **路由**：使用 hash 模式（`/#/guide`、`/#/chat`、`/#/done`），GitHub Pages 刷新和深链都不会 404
-- **部署**：GitHub Actions 在 `app/` 执行 `npm ci && npm run build`，把 `app/dist` 发布到 GitHub Pages
+- **路由**：使用 hash 模式（`/#/guide`、`/#/chat`、`/#/done`），静态托管下刷新和深链都不会 404
+- **部署**：Cloudflare Pages 通过 Git 集成自动构建发布（根目录 `app`、构建命令 `npm run build`、输出 `dist`）；GitHub Actions 同时发布到 GitHub Pages 作为备用
 
 ## 本地运行
 
@@ -75,14 +77,14 @@ think-first/
 ```bash
 cd app
 npm install
-npm run dev      # http://localhost:5173/think-first/
+npm run dev      # http://localhost:5173/
 ```
 
 构建与预览：
 
 ```bash
 npm run build
-npm run preview  # http://localhost:4173/think-first/
+npm run preview  # http://localhost:4173/
 ```
 
 ## 文档
