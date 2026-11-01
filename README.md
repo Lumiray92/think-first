@@ -4,6 +4,20 @@
 
 ThinkFirst 用 course07 的 12 步方法论，把一个模糊的点子逼成一份可以直接交给 AI 或团队的需求文档（PRD）。2.0 版本提供“快速思考”工作台：每一步给 3 个候选，用户点选、语音或直接贴文字即可推进，不用从空白页开始写。
 
+## 在线体验
+
+直接打开 **<http://47.239.11.71/>**，注册一个账号即可完整体验 2.0：登录、自带 DeepSeek Key、快速思考 12 步、PRD 导出与会话持久化都能跑通。没有 Key 也能走完全流程，候选与 PRD 由内置模板生成。
+
+> 演示环境部署在阿里云香港 1Mbps 实例上，首屏约 250KB，访问慢属正常现象。
+
+## 使用说明
+
+1. 打开 <http://47.239.11.71/>，在登录页用邮箱 + 密码注册（密码至少 8 位）。
+2. 登录后进入「设置」，粘贴自己的 DeepSeek API Key；Key 用 AES-256-GCM 加密入库，界面只显示 `sk-****abcd`，不填也能用模板跑完。
+3. 进入「快速思考」工作台，输入一句想法（例如「做一个自动整理会议纪要的小工具」），每一步给 3 个候选，点选、语音或直接输入文字推进。
+4. 第 6 步灵魂三问、第 8 步 Go/No-Go 闸门会拦住不合格的想法，按提示补充信息即可继续。
+5. 完成后在右侧 PRD 面板复制或导出 Markdown，可直接粘给 AI 或团队。
+
 ## 2.0 已实现
 
 - **登录与成本可控**：邮箱 + 密码注册登录；每个用户使用自己的 DeepSeek API Key。
@@ -49,17 +63,22 @@ VITE_COACH_API=1 npm run dev
 打开 <http://localhost:5173/ThinkFirst/login> 注册账号，进入 `/v2`。
 没有设置 Key 时全流程仍可跑通，回合上的来源标记会显示“模板”；在“Key 设置”里保存自己的 DeepSeek Key 后，候选和 PRD 会显示“DeepSeek”。
 
-## 配置与部署
+## 部署
 
-生产环境需要：
+当前演示环境是单台阿里云 ECS（Ubuntu 22.04、2 核 2G、香港地域），同一台机器上跑前端和后端：
 
-- MySQL 8
-- 必填 `TF_JWT_SECRET`（至少 32 字节）
-- 必填 `TF_MASTER_KEY`（32 字节 Base64）
-- `TF_CORS_ORIGINS` 指向前端域名
-- HTTPS 反向代理
+- Nginx 托管 `app/dist`，`/api/` 反向代理到 `127.0.0.1:8080`，并配置 SPA 回退（history 路由刷新不 404）
+- Spring Boot 以 systemd 服务常驻，数据库用 H2 文件（`/opt/thinkfirst/data`），重启后可恢复
+- 密钥通过 `EnvironmentFile` 注入：`TF_JWT_SECRET`、`TF_MASTER_KEY`、`COACH_DATA_DIR`、`TF_CORS_ORIGINS`
 
-完整的环境变量表、MySQL 建库、构建命令、Nginx 示例、Key 安全与成本估算见 **[server/README.md](server/README.md)**。
+构建命令：
+
+```bash
+cd app && npm ci && VITE_BASE=/ npm run build     # 部署到根路径
+cd server && mvn -DskipTests package              # 产物 target/thinkfirst-server-*.jar
+```
+
+生产环境建议：MySQL 8 替代 H2、`TF_JWT_SECRET`（至少 32 字节）与 `TF_MASTER_KEY`（32 字节 Base64）必须替换为随机值、加上 HTTPS 反向代理。完整的环境变量表、建库、Nginx 示例、Key 安全与成本估算见 **[server/README.md](server/README.md)**。
 
 ## 测试
 
