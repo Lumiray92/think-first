@@ -1,19 +1,5 @@
 <script setup>
-import { watch } from 'vue'
-import { RouterView, useRoute } from 'vue-router'
-
-import Toast from '@/components/Toast.vue'
-
-const route = useRoute()
-
-watch(
-  () => route.name,
-  (name) => {
-    document.body.classList.toggle('landing', name === 'home')
-    document.body.classList.toggle('scrollable', name === 'guide' || name === 'done')
-  },
-  { immediate: true },
-)
+import { RouterView } from 'vue-router'
 </script>
 
 <template>
@@ -22,5 +8,4 @@ watch(
       <component :is="Component" />
     </Transition>
   </RouterView>
-  <Toast />
 </template>

@@ -1,0 +1,1 @@
+{"format":"float32-le","dimension":2048,"count":12,"steps":[1,2,3,4,5,6,7,8,9,10,11,12],"names":["问题发现","JTBD 任务定义","逆向思维 / Pre-mortem","减法思维 / MVP","故事思维","灵魂三问","场景适配","开发前检查","搭建上下文","选框架，写第一版 Prompt","按需加高级技巧","写 PRD"],"model":"text-embedding-v4","total_tokens":356,"generated_at":"2026-10-29T13:00:40.051Z"}

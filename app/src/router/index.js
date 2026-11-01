@@ -1,23 +1,34 @@
-import { createRouter, createWebHashHistory } from 'vue-router'
+import { createRouter, createWebHistory } from 'vue-router'
 
-import HomeView from '@/views/HomeView.vue'
-import GuideView from '@/views/GuideView.vue'
-import ChatView from '@/views/ChatView.vue'
-import DoneView from '@/views/DoneView.vue'
+import LoginView from '@/views/LoginView.vue'
+import SettingsView from '@/views/SettingsView.vue'
+import WorkbenchView from '@/views/v2/WorkbenchView.vue'
+import { isLoggedIn } from '@/lib/auth.js'
+import { isRemote } from '@/lib/v2/client.js'
 
 const router = createRouter({
-  // GitHub Pages 没有 SPA 回退，用 hash 路由保证刷新与深链可用
-  history: createWebHashHistory(import.meta.env.BASE_URL),
+  history: createWebHistory(import.meta.env.BASE_URL),
   routes: [
-    { path: '/', name: 'home', component: HomeView },
-    { path: '/guide', name: 'guide', component: GuideView },
-    { path: '/chat', name: 'chat', component: ChatView },
-    { path: '/done', name: 'done', component: DoneView },
-    { path: '/:pathMatch(.*)*', redirect: '/' },
+    { path: '/', redirect: '/v2' },
+    { path: '/login', name: 'login', component: LoginView },
+    { path: '/v2', name: 'v2', component: WorkbenchView, meta: { requiresAuth: true } },
+    { path: '/settings', name: 'settings', component: SettingsView, meta: { requiresAuth: true } },
+    { path: '/:pathMatch(.*)*', redirect: '/v2' },
   ],
   scrollBehavior() {
     return { top: 0 }
   },
+})
+
+router.beforeEach((to) => {
+  if (!isRemote) return true
+  if (to.meta.requiresAuth && !isLoggedIn()) {
+    return { name: 'login', query: { redirect: to.fullPath } }
+  }
+  if (to.name === 'login' && isLoggedIn()) {
+    return { name: 'v2' }
+  }
+  return true
 })
 
 export default router

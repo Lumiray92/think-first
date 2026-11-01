@@ -1,0 +1,49 @@
+server:
+  port: 8080
+
+spring:
+  application:
+    name: thinkfirst-server
+  jackson:
+    time-zone: Asia/Shanghai
+    default-property-inclusion: non_null
+  datasource:
+    url: ${DB_URL:jdbc:h2:file:./data/thinkfirst;MODE=MySQL;AUTO_SERVER=TRUE}
+    username: ${DB_USERNAME:sa}
+    password: ${DB_PASSWORD:}
+    driver-class-name: ${DB_DRIVER:org.h2.Driver}
+  jpa:
+    hibernate:
+      ddl-auto: update
+    open-in-view: false
+    properties:
+      hibernate:
+        format_sql: false
+
+coach:
+  enabled: ${COACH_ENABLED:true}
+  data-dir: ${COACH_DATA_DIR:../app/rag/course07}
+
+llm:
+  enabled: ${LLM_ENABLED:true}
+  base-url: ${DEEPSEEK_BASE_URL:https://api.deepseek.com}
+  model: ${DEEPSEEK_MODEL:deepseek-chat}
+  timeout-seconds: ${LLM_TIMEOUT_SECONDS:60}
+  slots-max-tokens: ${LLM_SLOTS_MAX_TOKENS:4000}
+  question-max-tokens: ${LLM_QUESTION_MAX_TOKENS:700}
+  prd-max-tokens: ${LLM_PRD_MAX_TOKENS:3000}
+
+security:
+  jwt:
+    # 生产必须通过 TF_JWT_SECRET 覆盖，长度至少 32 字节
+    secret: ${TF_JWT_SECRET:thinkfirst-dev-jwt-secret-change-me-0123456789}
+    expiration-hours: ${TF_JWT_EXPIRATION_HOURS:8}
+  api-key:
+    # 生产必须通过 TF_MASTER_KEY 覆盖；这里是 32 字节 Base64，仅用于本地开发
+    master-key: ${TF_MASTER_KEY:bmuad7ZwbJTQNUBWidravaQbR/xahc68kMb/Hd2zTXc=}
+    validation-enabled: ${TF_KEY_VALIDATION:true}
+    deepseek-base-url: ${DEEPSEEK_BASE_URL:https://api.deepseek.com}
+
+app:
+  cors:
+    allowed-origins: ${TF_CORS_ORIGINS:http://localhost:5173,http://127.0.0.1:5173}

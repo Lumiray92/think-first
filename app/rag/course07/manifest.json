@@ -1,0 +1,536 @@
+{
+  "version": 1,
+  "root": "<COURSE07_DIR>",
+  "generated_at": "2026-10-29T13:08:31.710Z",
+  "file_count": 125,
+  "chunk_count": 1005,
+  "total_chars": 356808,
+  "total_embed_chars": 371559,
+  "estimated_tokens": 239715,
+  "by_step": {
+    "0": 125,
+    "1": 59,
+    "2": 51,
+    "3": 69,
+    "4": 70,
+    "5": 44,
+    "6": 41,
+    "7": 53,
+    "8": 20,
+    "9": 12,
+    "10": 71,
+    "11": 93,
+    "12": 96,
+    "13": 30,
+    "14": 56,
+    "15": 49,
+    "16": 66
+  },
+  "by_type": {
+    "appendix": 52,
+    "case": 40,
+    "mindset": 360,
+    "technique": 405,
+    "answer": 15,
+    "manual": 30,
+    "template": 103
+  },
+  "sources": [
+    {
+      "source": "2-technique/ch04/ch04-advanced.md",
+      "chunks": 71
+    },
+    {
+      "source": "2-technique/ch08/ch08-summary.md",
+      "chunks": 64
+    },
+    {
+      "source": "2-technique/ch06/ch06-iterative-dialogue.md",
+      "chunks": 51
+    },
+    {
+      "source": "2-technique/ch03/ch03-structured-framework.md",
+      "chunks": 42
+    },
+    {
+      "source": "2-technique/ch05/ch05-prd.md",
+      "chunks": 37
+    },
+    {
+      "source": "2-technique/ch07/ch07-debugging-ai.md",
+      "chunks": 37
+    },
+    {
+      "source": "course07-Prompt-全流程手册.md",
+      "chunks": 30
+    },
+    {
+      "source": "1-mindset/ch02-inversion-thinking/ch02-3-pre-mortem-practical-guide.md",
+      "chunks": 29
+    },
+    {
+      "source": "2-technique/ch02-basic-prompts/ch02-prompts.md",
+      "chunks": 28
+    },
+    {
+      "source": "2-technique/ch05/projs/once/todo-list04.md",
+      "chunks": 25
+    },
+    {
+      "source": "2-technique/ch05/projs/stage/step1-prd.md",
+      "chunks": 22
+    },
+    {
+      "source": "1-mindset/appendix/C-mistakes.md",
+      "chunks": 20
+    },
+    {
+      "source": "2-technique/ch01-vibecoding/ch01-2-ai-games.md",
+      "chunks": 20
+    },
+    {
+      "source": "1-mindset/appendix/A-templates.md",
+      "chunks": 17
+    },
+    {
+      "source": "1-mindset/ch02-inversion-thinking/ch02-1-inversion-thinking-basics.md",
+      "chunks": 17
+    },
+    {
+      "source": "1-mindset/ch03-subtraction-thinking/ch03-4-practice-guide.md",
+      "chunks": 17
+    },
+    {
+      "source": "1-mindset/ch03-subtraction-thinking/ch03-2-case-studies.md",
+      "chunks": 16
+    },
+    {
+      "source": "1-mindset/appendix/B-case-studies.md",
+      "chunks": 15
+    },
+    {
+      "source": "answer.md",
+      "chunks": 15
+    },
+    {
+      "source": "1-mindset/ch01-thinking-upgrade/ch01-3-jtbd-intro-advanced.md",
+      "chunks": 15
+    },
+    {
+      "source": "1-mindset/ch02-inversion-thinking/ch02-2-pre-mortem-failure-patterns.md",
+      "chunks": 15
+    },
+    {
+      "source": "2-technique/ch05/ch05-practice-water-tracker-prd.md",
+      "chunks": 15
+    },
+    {
+      "source": "1-mindset/ch01-thinking-upgrade/ch01-2-jtbd-intro-practice.md",
+      "chunks": 14
+    },
+    {
+      "source": "1-mindset/ch03-subtraction-thinking/ch03-1-mvp-foundations.md",
+      "chunks": 13
+    },
+    {
+      "source": "1-mindset/ch03-subtraction-thinking/ch03-3-feature-strategy.md",
+      "chunks": 13
+    },
+    {
+      "source": "1-mindset/appendix/D-references.md",
+      "chunks": 12
+    },
+    {
+      "source": "2-technique/ch01-vibecoding/ch01-1.md",
+      "chunks": 12
+    },
+    {
+      "source": "1-mindset/ch07-problem-discovery/ch07-2-annoyance-diary.md",
+      "chunks": 12
+    },
+    {
+      "source": "1-mindset/ch07-problem-discovery/ch07-4-suggestions.md",
+      "chunks": 12
+    },
+    {
+      "source": "1-mindset/ch07-problem-discovery/ch07-5-practice.md",
+      "chunks": 10
+    },
+    {
+      "source": "1-mindset/ch01-thinking-upgrade/ch01-1-jtbd-intro-theory.md",
+      "chunks": 10
+    },
+    {
+      "source": "1-mindset/ch08-chapter-summary/index.md",
+      "chunks": 10
+    },
+    {
+      "source": "1-mindset/ch04-story-thinking/ch04-3-user-journey-map.md",
+      "chunks": 9
+    },
+    {
+      "source": "1-mindset/ch05-soul-questions/ch05-5-case-study.md",
+      "chunks": 9
+    },
+    {
+      "source": "1-mindset/ch06-scenario-application/ch06-3-automation.md",
+      "chunks": 9
+    },
+    {
+      "source": "1-mindset/ch06-scenario-application/ch06-4-personal-tools.md",
+      "chunks": 9
+    },
+    {
+      "source": "1-mindset/ch06-scenario-application/ch06-5-for-family.md",
+      "chunks": 9
+    },
+    {
+      "source": "2-technique/ch01-vibecoding/simple-book.md",
+      "chunks": 8
+    },
+    {
+      "source": "1-mindset/ch07-problem-discovery/ch07-3-suitable-problems.md",
+      "chunks": 8
+    },
+    {
+      "source": "1-mindset/ch05-soul-questions/ch05-3-why-you.md",
+      "chunks": 8
+    },
+    {
+      "source": "2-technique/ch05/projs/once/todo-list02.md",
+      "chunks": 8
+    },
+    {
+      "source": "1-mindset/ch04-story-thinking/ch04-1-product-as-story.md",
+      "chunks": 7
+    },
+    {
+      "source": "1-mindset/ch04-story-thinking/ch04-2-persona-3d.md",
+      "chunks": 7
+    },
+    {
+      "source": "1-mindset/ch04-story-thinking/ch04-4-prompt-writing.md",
+      "chunks": 7
+    },
+    {
+      "source": "1-mindset/ch05-soul-questions/ch05-2-what-pain.md",
+      "chunks": 7
+    },
+    {
+      "source": "1-mindset/ch06-scenario-application/ch06-2-data-analysis.md",
+      "chunks": 7
+    },
+    {
+      "source": "1-mindset/ch07-problem-discovery/ch07-1-problems-around.md",
+      "chunks": 6
+    },
+    {
+      "source": "1-mindset/ch02-inversion-thinking/index.md",
+      "chunks": 6
+    },
+    {
+      "source": "1-mindset/ch06-scenario-application/ch06-1-core-insight.md",
+      "chunks": 6
+    },
+    {
+      "source": "1-mindset/ch06-scenario-application/ch06-6-summary.md",
+      "chunks": 6
+    },
+    {
+      "source": "1-mindset/ch01-thinking-upgrade/index.md",
+      "chunks": 5
+    },
+    {
+      "source": "1-mindset/ch03-subtraction-thinking/index.md",
+      "chunks": 5
+    },
+    {
+      "source": "1-mindset/ch04-story-thinking/ch04-5-practice.md",
+      "chunks": 5
+    },
+    {
+      "source": "1-mindset/ch04-story-thinking/index.md",
+      "chunks": 5
+    },
+    {
+      "source": "1-mindset/ch05-soul-questions/ch05-1-who-is-user.md",
+      "chunks": 5
+    },
+    {
+      "source": "1-mindset/ch05-soul-questions/index.md",
+      "chunks": 5
+    },
+    {
+      "source": "1-mindset/ch06-scenario-application/index.md",
+      "chunks": 5
+    },
+    {
+      "source": "1-mindset/ch08-chapter-summary/ch08-2-next-chapter.md",
+      "chunks": 5
+    },
+    {
+      "source": "2-technique/ch02-basic-prompts/partII.md",
+      "chunks": 5
+    },
+    {
+      "source": "1-mindset/ch07-problem-discovery/ch07-6-summary.md",
+      "chunks": 4
+    },
+    {
+      "source": "1-mindset/ch07-problem-discovery/index.md",
+      "chunks": 4
+    },
+    {
+      "source": "1-mindset/ch08-chapter-summary/ch08-1-pre-dev-checklist.md",
+      "chunks": 4
+    },
+    {
+      "source": "2-technique/ch05/projs/once/todo-list03.md",
+      "chunks": 4
+    },
+    {
+      "source": "1-mindset/appendix/index.md",
+      "chunks": 3
+    },
+    {
+      "source": "1-mindset/index.md",
+      "chunks": 3
+    },
+    {
+      "source": "1-mindset/ch05-soul-questions/ch05-4-checklist.md",
+      "chunks": 3
+    },
+    {
+      "source": "1-mindset/ch01-thinking-upgrade/templates/jtbd-task.md",
+      "chunks": 2
+    },
+    {
+      "source": "1-mindset/ch04-story-thinking/ch04-6-summary.md",
+      "chunks": 2
+    },
+    {
+      "source": "1-mindset/ch05-soul-questions/ch05-6-summary.md",
+      "chunks": 2
+    },
+    {
+      "source": "2-technique/ch05/projs/script-action.md",
+      "chunks": 2
+    },
+    {
+      "source": "2-technique/ch05/projs/stage/step3-prd.md",
+      "chunks": 2
+    },
+    {
+      "source": "1-mindset/ch01-thinking-upgrade/templates/ask-ai.md",
+      "chunks": 1
+    },
+    {
+      "source": "1-mindset/ch01-thinking-upgrade/templates/jtbd-analysis.md",
+      "chunks": 1
+    },
+    {
+      "source": "1-mindset/ch01-thinking-upgrade/templates/jtbd-Optimize.md",
+      "chunks": 1
+    },
+    {
+      "source": "2-technique/ch03/prompt-templates/all3.md",
+      "chunks": 1
+    },
+    {
+      "source": "2-technique/ch03/prompt-templates/all7.md",
+      "chunks": 1
+    },
+    {
+      "source": "2-technique/ch03/prompt-templates/rgc.md",
+      "chunks": 1
+    },
+    {
+      "source": "2-technique/ch03/prompt-templates/scaff.md",
+      "chunks": 1
+    },
+    {
+      "source": "2-technique/ch03/prompt-templates/scf.md",
+      "chunks": 1
+    },
+    {
+      "source": "2-technique/ch04/tecs-template/code-convert.md",
+      "chunks": 1
+    },
+    {
+      "source": "2-technique/ch04/tecs-template/code-generate-self-critique.md",
+      "chunks": 1
+    },
+    {
+      "source": "2-technique/ch04/tecs-template/code-review.md",
+      "chunks": 1
+    },
+    {
+      "source": "2-technique/ch04/tecs-template/content-generate.md",
+      "chunks": 1
+    },
+    {
+      "source": "2-technique/ch04/tecs-template/cot-code-analisys.md",
+      "chunks": 1
+    },
+    {
+      "source": "2-technique/ch04/tecs-template/cot-concise.md",
+      "chunks": 1
+    },
+    {
+      "source": "2-technique/ch04/tecs-template/cot-problem-investigation.md",
+      "chunks": 1
+    },
+    {
+      "source": "2-technique/ch04/tecs-template/few-format-convert.md",
+      "chunks": 1
+    },
+    {
+      "source": "2-technique/ch04/tecs-template/few-shot.md",
+      "chunks": 1
+    },
+    {
+      "source": "2-technique/ch04/tecs-template/few-task-category.md",
+      "chunks": 1
+    },
+    {
+      "source": "2-technique/ch04/tecs-template/format-convert.md",
+      "chunks": 1
+    },
+    {
+      "source": "2-technique/ch04/tecs-template/self-critique-code-generate.md",
+      "chunks": 1
+    },
+    {
+      "source": "2-technique/ch04/tecs-template/self-critique-dimension.md",
+      "chunks": 1
+    },
+    {
+      "source": "2-technique/ch04/tecs-template/self-critique-strict.md",
+      "chunks": 1
+    },
+    {
+      "source": "2-technique/ch04/tecs-template/task-category.md",
+      "chunks": 1
+    },
+    {
+      "source": "2-technique/ch04/tecs-template/tot-concise.md",
+      "chunks": 1
+    },
+    {
+      "source": "2-technique/ch04/tecs-template/tot-technology-selection.md",
+      "chunks": 1
+    },
+    {
+      "source": "2-technique/ch04/tecs-template/tot.md",
+      "chunks": 1
+    },
+    {
+      "source": "2-technique/ch04/tecs-template/zero-code-convert.md",
+      "chunks": 1
+    },
+    {
+      "source": "2-technique/ch04/tecs-template/zero-code-review.md",
+      "chunks": 1
+    },
+    {
+      "source": "2-technique/ch04/tecs-template/zero-content-generate.md",
+      "chunks": 1
+    },
+    {
+      "source": "2-technique/ch05/prd-templates/auto-script.md",
+      "chunks": 1
+    },
+    {
+      "source": "2-technique/ch05/prd-templates/core.md",
+      "chunks": 1
+    },
+    {
+      "source": "2-technique/ch05/prd-templates/data-analysis.md",
+      "chunks": 1
+    },
+    {
+      "source": "2-technique/ch05/projs/once/todo-list01.md",
+      "chunks": 1
+    },
+    {
+      "source": "2-technique/ch05/prd-templates/three-stages/checkpoint.md",
+      "chunks": 1
+    },
+    {
+      "source": "2-technique/ch05/prd-templates/three-stages/stage1.md",
+      "chunks": 1
+    },
+    {
+      "source": "2-technique/ch05/prd-templates/three-stages/stage2.md",
+      "chunks": 1
+    },
+    {
+      "source": "2-technique/ch05/prd-templates/three-stages/stage3.md",
+      "chunks": 1
+    },
+    {
+      "source": "2-technique/ch05/projs/stage/step2-prd.md",
+      "chunks": 1
+    },
+    {
+      "source": "2-technique/ch06/iterative-dialogue/chat-summary.md",
+      "chunks": 1
+    },
+    {
+      "source": "2-technique/ch06/iterative-dialogue/new-chat-code.md",
+      "chunks": 1
+    },
+    {
+      "source": "2-technique/ch06/iterative-dialogue/new-chat-simpily.md",
+      "chunks": 1
+    },
+    {
+      "source": "2-technique/ch06/iterative-dialogue/new-chat.md",
+      "chunks": 1
+    },
+    {
+      "source": "2-technique/ch07/debug-prompt/ai-review.md",
+      "chunks": 1
+    },
+    {
+      "source": "2-technique/ch07/debug-prompt/bug-driven.md",
+      "chunks": 1
+    },
+    {
+      "source": "2-technique/ch07/debug-prompt/final-schema/ask.md",
+      "chunks": 1
+    },
+    {
+      "source": "2-technique/ch07/debug-prompt/fix-changeview.md",
+      "chunks": 1
+    },
+    {
+      "source": "2-technique/ch07/debug-prompt/fix-concise.md",
+      "chunks": 1
+    },
+    {
+      "source": "2-technique/ch07/debug-prompt/fix-fewshot.md",
+      "chunks": 1
+    },
+    {
+      "source": "2-technique/ch07/debug-prompt/fix-logic.md",
+      "chunks": 1
+    },
+    {
+      "source": "2-technique/ch07/debug-prompt/fix-runtime.md",
+      "chunks": 1
+    },
+    {
+      "source": "2-technique/ch07/debug-prompt/fix-selfcritique.md",
+      "chunks": 1
+    },
+    {
+      "source": "2-technique/ch07/debug-prompt/fix-steps.md",
+      "chunks": 1
+    },
+    {
+      "source": "2-technique/ch07/debug-prompt/fix-style.md",
+      "chunks": 1
+    }
+  ]
+}

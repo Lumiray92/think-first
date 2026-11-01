@@ -1,0 +1,38 @@
+# 生产环境配置：启动时加 --spring.profiles.active=prod
+# 所有敏感值都从环境变量读取，不要把真实密钥写进本文件。
+server:
+  port: ${SERVER_PORT:8080}
+  forward-headers-strategy: framework
+  compression:
+    enabled: true
+    mime-types: application/json,text/html,text/css,application/javascript
+
+spring:
+  datasource:
+    url: ${DB_URL:jdbc:mysql://127.0.0.1:3306/thinkfirst?useUnicode=true&characterEncoding=utf8&serverTimezone=Asia/Shanghai}
+    username: ${DB_USERNAME:thinkfirst}
+    password: ${DB_PASSWORD:}
+    driver-class-name: ${DB_DRIVER:com.mysql.cj.jdbc.Driver}
+    hikari:
+      maximum-pool-size: ${DB_POOL_SIZE:10}
+      minimum-idle: ${DB_MIN_IDLE:2}
+  jpa:
+    hibernate:
+      ddl-auto: ${JPA_DDL_AUTO:update}
+    properties:
+      hibernate:
+        jdbc:
+          time_zone: Asia/Shanghai
+
+coach:
+  enabled: ${COACH_ENABLED:true}
+  data-dir: ${COACH_DATA_DIR:../app/rag/course07}
+
+security:
+  api-key:
+    # 生产环境应由 TF_KEY_VALIDATION=true 在保存 Key 时做一次真实校验
+    validation-enabled: ${TF_KEY_VALIDATION:true}
+
+app:
+  cors:
+    allowed-origins: ${TF_CORS_ORIGINS:https://thinkfirst.example.com}
